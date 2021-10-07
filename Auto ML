@@ -1,0 +1,295 @@
+
+
+
+
+
+1#Importing all the required libraries
+
+
+!pip install scikit-learn==0.24.0
+
+pip install pandas==1.1.0
+
+
+!apt-get install swig -y
+!pip install Cython numpy
+!pip install auto-sklearn 
+
+!python -m pip install "dask[complete]"
+
+!python -m pip install dask
+
+!python -m pip install dask distributed --upgrade 
+
+
+!apt-get -qq install -y libfluidsynth1.
+
+!pip install auto-sklearn==0.10.0
+
+pip install --force-reinstall scipy==1.6
+
+
+
+import autosklearn.classification as classifier
+
+
+
+import pandas as pd
+import numpy as np
+import pandas_profiling
+import matplotlib.pyplot as plt
+%matplotlib inline
+import plotly.offline as po
+import plotly.graph_objs as go
+import seaborn as sns
+
+
+#To ignore the warnings 
+import warnings as wg
+wg.filterwarnings("ignore")
+
+
+from google.colab import drive
+
+
+drive.mount('/content/drive')
+
+train= pd.read_csv('/content/drive/MyDrive/train.csv')
+test= pd.read_csv('/content/drive/MyDrive/test.csv')
+
+train1 = pd.get_dummies(data=train, columns=['cat0','cat1','cat2','cat3','cat4','cat5','cat6','cat7','cat8','cat9'])
+train1.columns
+
+test = pd.get_dummies(data=test, columns=['cat0','cat1','cat2','cat3','cat4','cat5','cat6','cat7','cat8','cat9'])
+test.columns
+
+X=train1.drop(['target','id'],axis=1)
+X.head()
+
+y = train.drop(['cat0','cat1','cat2','cat3','cat4','cat5','cat6','cat7','cat8','cat9','cont0','cont1','cont2','cont3','cont4','cont5','cont6','cont7','cont8','cont9','cont10','cont11','cont12','cont13','id'],axis=1)
+y
+
+X1 = X.astype('category',)
+
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+my_pipeline = Pipeline([
+    ('imputer', SimpleImputer(strategy ='mean')),
+    ('std_scaler' , StandardScaler())
+    
+])
+
+train_imp= my_pipeline.fit_transform(X1)
+
+train_imp.head()
+
+print(a)
+
+import autosklearn
+
+model = autosklearn.classification.AutoSklearnClassifier(time_left_for_this_task=1800, per_run_time_limit=40)
+
+model.fit(train_imp,y)
+
+print(a)
+
+
+
+
+
+
+
+# to Read data 
+print(a)
+
+
+data
+
+data.head()
+
+
+data.tail()
+
+
+data.info()
+
+
+data.describe()
+
+data.isnull().sum()
+
+data.iloc[643]
+
+mean_value= data['GrandPayment'].mean()
+data['GrandPayment'].fillna(value=mean_value , inplace= True )
+
+data.iloc[643]
+
+import sklearn
+
+
+
+** Auto Sklearn ** 
+
+train=pd.read_csv(r'/train.csv')
+
+
+yes_no_columns = ['Aged','Married','TotalDependents','MobileService','CyberProtection','HardwareSupport','TechnicalAssistance',
+                'FilmSubscription','CustomerAttrition' ]
+for col in yes_no_columns:
+    train[col].replace({'Yes': 1,'No': 0},inplace=True)
+
+mean_value=train1['GrandPayment'].mean()
+train1['GrandPayment'].fillna(value=mean_value,inplace=True)
+
+train['sex'].replace({'Female':1,'Male':0},inplace=True)
+train.sex.unique()
+
+
+train1= pd.get_dummies(data=train, columns=['4GService','SettlementProcess'])
+train1.columns
+
+train1.drop('ID' ,axis='columns', inplace=True)
+
+train1_labels=train1['CustomerAttrition'].copy()
+
+train1.drop('CustomerAttrition', axis='columns' , inplace=True)
+
+train1.dtypes
+
+train1.isnull().sum()
+
+train2 = train1.astype('category',)
+
+train2.info()
+
+
+from sklearn.impute import SimpleImputer
+
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+my_pipeline = Pipeline([
+    ('imputer', SimpleImputer(strategy ='mean')),
+    ('std_scaler' , StandardScaler())
+    
+])
+
+
+train_imp= my_pipeline.fit_transform(train2)
+
+import autosklearn
+
+from sklearn.model_selection import train_test_split
+
+train1.info()
+
+model = autosklearn.classification.AutoSklearnClassifier(time_left_for_this_task=1800, per_run_time_limit=40)
+
+model.fit(train1,train1_labels)
+
+some_data = train1.iloc[:5]
+
+some_labels = train1_labels.iloc[:5]
+
+prepared_data = my_pipeline.transform(some_data)
+
+model.predict(prepared_data)
+
+list(some_labels)
+
+
+
+test= pd.read_csv(r'/test.csv')
+
+
+def print_unique_col_values(test):
+       for column in test:
+            if test[column].dtypes=='object':
+                print(f'{column}: {test[column].unique()}')
+
+yes_no_columns = ['Aged','Married','TotalDependents','MobileService','CyberProtection','HardwareSupport','TechnicalAssistance',
+                'FilmSubscription']
+for col in yes_no_columns:
+    test[col].replace({'Yes': 1,'No': 0},inplace=True)
+
+print_unique_col_values(test)
+
+
+test['sex'].replace({'Female':1,'Male':0},inplace=True)
+test.sex.unique()
+
+
+
+test.head()
+
+test.drop('ID' ,axis='columns', inplace=True)
+
+
+
+
+
+
+
+test1 = pd.get_dummies(data=test, columns=['4GService','SettlementProcess'])
+test1.columns
+
+mean_value = test1['GrandPayment'].mean()
+test1['GrandPayment'].fillna(value=mean_value, inplace=True)
+
+test1.info()
+
+
+
+#test2.info()
+
+test2.isnull().sum()
+
+ 
+final_pred = model.predict(test1)
+
+
+y_pred = final_pred
+
+len(y_pred)
+
+pred=pd.DataFrame(y_pred)
+sub_df=pd.read_csv(r'/Sample Submission.csv')
+
+
+submission = pd.concat([sub_df['ID'],pred],axis=1)
+submission.columns=['ID',"CustomerAttrition"]
+
+submission.info()
+
+submission.astype('object').dtypes
+
+
+submission['CustomerAttrition'].replace({0:'No',1:'Yes' },inplace=True)
+submission.CustomerAttrition.unique()
+
+
+submission.tail()
+
+submission.to_csv('SAMPLESUBAutoMl.csv')
+
+ ***Saving The Model***
+
+
+
+
+
+
+**Model Testing**
+
+
+
+
+
+
+
+
+
+
+
+
+
